@@ -8,12 +8,16 @@ public class DiceManager : MonoBehaviour
 
     public void RollDice()
     {
+        
         int dice = Random.Range(1, 4);
-
-        diceText.text = "Dice: " + dice;
-
-        Debug.Log("Dice rolled: " + dice);
+        Debug.Log("Dice: " + dice);
 
         player.Move(dice);
+        diceText.text = "Dice: " + dice;
+        if (player.isMoving)
+        {
+            Debug.Log("Still moving!");
+            return;
+        }
     }
 }

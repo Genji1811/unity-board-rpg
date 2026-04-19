@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Unity\\My project (1)\\Assembly-CSharp.csproj": {}
+    "E:\\Unity\\BoardGame1\\Assembly-CSharp.csproj": {}
   },
   "projects": {
-    "E:\\Unity\\My project (1)\\Assembly-CSharp.csproj": {
+    "E:\\Unity\\BoardGame1\\Assembly-CSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Unity\\My project (1)\\Assembly-CSharp.csproj",
+        "projectUniqueName": "E:\\Unity\\BoardGame1\\Assembly-CSharp.csproj",
         "projectName": "Assembly-CSharp",
-        "projectPath": "E:\\Unity\\My project (1)\\Assembly-CSharp.csproj",
+        "projectPath": "E:\\Unity\\BoardGame1\\Assembly-CSharp.csproj",
         "packagesPath": "C:\\Users\\ghuy1\\.nuget\\packages\\",
-        "outputPath": "E:\\Unity\\My project (1)\\Temp\\obj\\Debug\\Assembly-CSharp\\",
+        "outputPath": "E:\\Unity\\BoardGame1\\Temp\\obj\\Debug\\Assembly-CSharp\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ghuy1\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -357,7 +357,11 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/BoardManager.cs"
+"Assets/Card.cs"
+"Assets/CombatUI.cs"
 "Assets/DiceManager.cs"
+"Assets/GameUI.cs"
+"Assets/MessageUI.cs"
 "Assets/PlayerController.cs"
 "Assets/test.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
@@ -395,6 +399,7 @@
 "Assets/TextMesh Pro/Examples & Extras/Scripts/VertexZoom.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/WarpTextExample.cs"
 "Assets/Tile.cs"
+"Assets/TileEventHandler.cs"
 -langversion:9.0
 /deterministic
 /optimize+
