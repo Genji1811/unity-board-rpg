@@ -17,30 +17,41 @@ public class Tile : MonoBehaviour
     public bool isOccupied;
     public TileType tileType;
     public int tileIndex;
-    void Start()
-{
-    UpdateColor();
-}
+    [Header("Sprites")]
+    public Sprite normalSprite;
+    public Sprite rewardSprite;
+    public Sprite trapSprite;
+    public Sprite challengeSprite;
 
-void UpdateColor()
-{
-    SpriteRenderer sr = GetComponent<SpriteRenderer>();
-
-    switch (tileType)
+    private SpriteRenderer sr;
+ void Start()
     {
-        case TileType.Reward:
-            sr.color = Color.yellow;
-            break;
-        case TileType.Trap:
-            sr.color = Color.magenta;
-            break;
-        case TileType.Challenge:
-            sr.color = Color.red;
-            break;
-        default:
-            sr.color = Color.white;
-            break;
+        sr = GetComponent<SpriteRenderer>();
+
+        UpdateTileVisual();
     }
-}
+
+    void UpdateTileVisual()
+    {
+        switch (tileType)
+        {
+            case TileType.Reward:
+                sr.sprite = rewardSprite;
+                break;
+
+            case TileType.Trap:
+                sr.sprite = trapSprite;
+                break;
+
+            case TileType.Challenge:
+                sr.sprite = challengeSprite;
+                break;
+
+            default:
+                sr.sprite = normalSprite;
+                break;
+        }
+    }
+
 }
 

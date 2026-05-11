@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CombatUI : MonoBehaviour
 {
@@ -11,17 +12,20 @@ public class CombatUI : MonoBehaviour
     public TMP_Text damageText;
     public TMP_Text resultText;
     public Transform cardContainer;
-    public GameObject cardButtonPrefab;
+    public GameObject cardPrefab;
     
     public Button fightButton;
+    public Button endButton;
+    public Image diceImage;
 
+    private System.Action onEnd;
     private System.Action onFight;
-
+    private Sprite[] diceSprites;
     public void Show(int enemyHP, System.Action fightAction)
     {
-        ShowCards();
+        RefreshCards();
         panel.SetActive(true);
-        
+        resultImage.gameObject.SetActive(false);
         enemyText.text = "Enemy HP: " + enemyHP;
         diceText.text = "";
         damageText.text = "";
@@ -31,10 +35,14 @@ public class CombatUI : MonoBehaviour
 
         fightButton.onClick.RemoveAllListeners();
         fightButton.onClick.AddListener(() => OnFightClick());
+        endButton.gameObject.SetActive(false);
     }
     void Start()
     {
         panel.SetActive(false);
+        diceSprites = Resources.LoadAll<Sprite>("DiceSides");
+
+        endButton.gameObject.SetActive(false);
     }
     void OnFightClick()
     {
@@ -47,32 +55,72 @@ public class CombatUI : MonoBehaviour
         diceText.text = "Dice: " + dice;
         damageText.text = "Damage: " + dice + " × " + ap + " = " + (dice * ap);
     }
-
+    public Sprite WinSprite;
+    public Sprite LoseSprite;
+    public Image resultImage;
+    
     public void ShowResult(bool win)
     {
-        resultText.text = win ? "WIN!" : "LOSE!";
+        resultImage.gameObject.SetActive(true);
+
+        resultImage.sprite = win ? WinSprite : LoseSprite;
     }
 
     public void Hide()
     {
         panel.SetActive(false);
+        resultImage.gameObject.SetActive(false);
     }
-    void ShowCards()
+    public void RefreshCards()
 {
     foreach (Transform child in cardContainer)
+    {
         Destroy(child.gameObject);
+    }
 
     foreach (Card card in player.deck)
     {
-        GameObject btn = Instantiate(cardButtonPrefab, cardContainer);
+        GameObject obj =
+            Instantiate(cardPrefab, cardContainer);
 
-        btn.GetComponentInChildren<TMP_Text>().text = card.cardName;
+        CardUI ui =
+            obj.GetComponent<CardUI>();
 
-        btn.GetComponent<Button>().onClick.AddListener(() =>
-        {
-            player.UseCard(card);
-            ShowCards(); // refresh UI
-        });
+        ui.Setup(card, player, this);
     }
+}
+    public IEnumerator RollDiceAnimation(System.Action<int> onFinish)
+{
+    for (int i = 0; i < 10; i++)
+    {
+        int temp = Random.Range(1, 7);
+
+        diceText.text = "Dice: " + temp;
+
+        diceImage.sprite = diceSprites[temp - 1];
+
+        yield return new WaitForSeconds(0.05f);
+    }
+
+    int finalDice = Random.Range(1, 7);
+
+    diceText.text = "Dice: " + finalDice;
+
+    diceImage.sprite = diceSprites[finalDice - 1];
+
+    onFinish?.Invoke(finalDice);
+}
+public void SetupEndButton(System.Action endAction)
+{
+    onEnd = endAction;
+
+    endButton.gameObject.SetActive(true);
+
+    endButton.onClick.RemoveAllListeners();
+
+    endButton.onClick.AddListener(() =>
+    {
+        onEnd?.Invoke();
+    });
 }
 }

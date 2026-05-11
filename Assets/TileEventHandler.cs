@@ -85,7 +85,14 @@ public class TileEventHandler : MonoBehaviour
     }
     IEnumerator DoFight(Tile tile, int enemyHP)
     {
-        int dice = Random.Range(1, 5);
+        int dice = 0;
+
+        yield return StartCoroutine(
+            combatUI.RollDiceAnimation(result =>
+            {
+            dice = result;
+            })
+        );
         int finalAP = player.currentAP + player.tempAP;
         int damage = dice * finalAP;
 
@@ -122,20 +129,30 @@ public class TileEventHandler : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.5f);
-        combatUI.Hide();        
-        player.ResetCombatState();
-        player.EndTurn();
+        bool end = false;
+
+    combatUI.SetupEndButton(() =>
+    {
+       end = true;
+    });
+
+    yield return new WaitUntil(() => end);
+
+    combatUI.Hide();
+
+    player.ResetCombatState();
+
+    player.EndTurn();
     }
     int GetEnemyHP(int index)
     {
         switch (index)
         {
-            case 1: return 5;
-            case 2: return 10;
-            case 3: return 15;
-            case 4: return 20;
-            case 5: return 30;
+            case 1: return 15;
+            case 2: return 25;
+            case 3: return 40;
+            case 4: return 65;
+            case 5: return 100;
             default: return 5;
         }
     }

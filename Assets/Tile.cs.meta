@@ -3,7 +3,11 @@ guid: 3b1f1dfb1d6b89649a6c47e13f4d3626
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - normalSprite: {fileID: 21300000, guid: b5b10ed396def41499ebf080e3abef96, type: 3}
+  - rewardSprite: {fileID: 21300000, guid: a9d5cbdb042726e4dac5c6ec169c5d2f, type: 3}
+  - trapSprite: {fileID: 21300000, guid: 0c83ad7dc756ff346ace551e38aa93b7, type: 3}
+  - challengeSprite: {fileID: 21300000, guid: 0ecaf736e0649c746867a41d07aca7b1, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
