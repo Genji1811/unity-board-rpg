@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menuPanel;
+    public BoardManager boardManager;
+    public PlayerController player;
 
     void Start()
     {
@@ -26,6 +28,17 @@ public class PauseMenu : MonoBehaviour
             SceneManager.GetActiveScene().buildIndex
         );
     }
+    public void NewMap()
+{
+    boardManager.GenerateBoard();
+
+    player.currentTileIndex = 0;
+
+    player.transform.position =
+        player.tiles[0].position;
+
+    menuPanel.SetActive(false);
+}
 
     public void QuitGame()
     {

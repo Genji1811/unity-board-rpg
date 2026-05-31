@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum TileType
@@ -8,7 +6,6 @@ public enum TileType
     Reward,
     Trap,
     Challenge
-    
 }
 
 public class Tile : MonoBehaviour
@@ -17,6 +14,7 @@ public class Tile : MonoBehaviour
     public bool isOccupied;
     public TileType tileType;
     public int tileIndex;
+
     [Header("Sprites")]
     public Sprite normalSprite;
     public Sprite rewardSprite;
@@ -24,15 +22,34 @@ public class Tile : MonoBehaviour
     public Sprite challengeSprite;
 
     private SpriteRenderer sr;
- void Start()
+
+    void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+    }
 
+    void Start()
+    {
         UpdateTileVisual();
     }
 
-    void UpdateTileVisual()
+    public void SetTileType(TileType newType)
     {
+        tileType = newType;
+        UpdateTileVisual();
+    }
+
+    public void UpdateTileVisual()
+    {
+        if (sr == null)
+            sr = GetComponent<SpriteRenderer>();
+
+        if (sr == null)
+        {
+            Debug.LogError(name + " missing SpriteRenderer");
+            return;
+        }
+
         switch (tileType)
         {
             case TileType.Reward:
@@ -52,6 +69,4 @@ public class Tile : MonoBehaviour
                 break;
         }
     }
-
 }
-

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 public class TileEventHandler : MonoBehaviour
 {
@@ -22,7 +24,7 @@ public class TileEventHandler : MonoBehaviour
                 break;
 
             case TileType.None:
-                UIManager.instance.ShowMessage("Normal tile");
+                UIManager.instance.ShowMessage("Nothing happens");
                 player.EndTurn();
                 break;
             default:
@@ -39,12 +41,12 @@ public class TileEventHandler : MonoBehaviour
         if (rand == 0)
         {
             int step = Random.Range(1, 3);
-            UIManager.instance.ShowMessage("Reward: Move +" + step);
+            UIManager.instance.ShowMessage("Get reward, go +" + step + " steps");
             yield return player.StartCoroutine(player.DelayMove(step));
         }
         else
         {
-            UIManager.instance.ShowMessage("Reward: Get card");
+            UIManager.instance.ShowMessage("Get reward. gain a random card");
             player.AddCard(player.GenerateRandomCard());
             player.EndTurn();
             yield return null;
@@ -57,12 +59,12 @@ public class TileEventHandler : MonoBehaviour
 
         if (rand == 0)
         {
-            UIManager.instance.ShowMessage("Trap: Move -1");
+            UIManager.instance.ShowMessage("Trapped, go back 1 step");
             yield return player.StartCoroutine(player.DelayMove(-1));
         }
         else
         {   
-            UIManager.instance.ShowMessage("Trap: Lose card");
+            UIManager.instance.ShowMessage("Trapped, you lose a card");
             player.RemoveRandomCard();
             player.EndTurn();
             yield return null;
@@ -110,7 +112,10 @@ public class TileEventHandler : MonoBehaviour
         {
             int reward = GetRewardAP(tile.tileIndex);
             player.currentAP += reward;
-            UIManager.instance.ShowMessage("You won! AP +" + reward);
+            if (tile.tileIndex != 1 && tile.tileIndex != 2 && tile.tileIndex != 3 && tile.tileIndex != 4)
+            {
+                UIManager.instance.ShowMessage("You won! your AP increased by " + reward);
+            }
         }
         else
         {
@@ -122,27 +127,32 @@ public class TileEventHandler : MonoBehaviour
             }
             else
             {
-                UIManager.instance.ShowMessage("You lost! HP -1");
+                UIManager.instance.ShowMessage("You lost! your HP decreased by 1");
                 player.currentTileIndex = 0;
                 player.currentHP -= 1;
+                if (player.currentHP <= 0)
+                {
+                    WinLoseUI.instance.ShowLose();
+                    yield break;
+                }
                 player.transform.position = player.tiles[0].position;
             }
         }
 
         bool end = false;
 
-    combatUI.SetupEndButton(() =>
-    {
-       end = true;
-    });
+        combatUI.SetupEndButton(() =>
+        {
+            end = true;
+        });
 
-    yield return new WaitUntil(() => end);
+        yield return new WaitUntil(() => end);
 
-    combatUI.Hide();
+        combatUI.Hide();
 
-    player.ResetCombatState();
+        player.ResetCombatState();
 
-    player.EndTurn();
+        player.EndTurn();
     }
     int GetEnemyHP(int index)
     {
@@ -156,7 +166,7 @@ public class TileEventHandler : MonoBehaviour
             default: return 5;
         }
     }
-
+    
     int GetRewardAP(int index)
     {
         switch (index)
@@ -166,7 +176,13 @@ public class TileEventHandler : MonoBehaviour
             case 3: return 2;
             case 4: return 2;
             case 5: 
-                UIManager.instance.ShowMessage("You win in " + player.turnCount + " turns!");
+                UIManager.instance.ShowMessage("Congratulations! You win in " + player.turnCount + " turns!");
+                LeaderboardManager.instance.AddScore(player.turnCount);
+                FindObjectOfType<LeaderboardUI>()
+                    .Refresh();
+                WinLoseUI.instance.ShowWin(
+                    player.turnCount
+                );
                 return 0;
             default: return 1;
         }
